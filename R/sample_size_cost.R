@@ -13,7 +13,7 @@ categories <- 1:num.categories
 # a place-holder vector of all 0's, used in constructing the vector of observed frequencies in the sample
 zeroes <- rep(0, num.categories)
 
-sample.sizes <- c(10, 30, 75, 150)
+sample.sizes <- 10 * (1:100)
 num.samples <- 1000
 
 similarities <- vector()
