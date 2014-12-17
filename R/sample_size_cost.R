@@ -7,12 +7,11 @@ theoretical <- c(5, 10, 15, 30, 50)
 theoretical.probs <- theoretical / sum(theoretical)
 
 # names of the categories represented by the theoretical distribution
-categories <- c("A", "B", "C", "D", "E")
-names(theoretical) <- categories
-names(theoretical.probs) <- categories
+num.categories <- length(theoretical)
+categories <- 1:num.categories
 
 # a place-holder vector of all 0's, used in constructing the vector of observed frequencies in the sample
-zeroes <- rep(0, 5)
+zeroes <- rep(0, num.categories)
 
 sample.sizes <- c(10, 30, 75, 150)
 num.samples <- 1000
