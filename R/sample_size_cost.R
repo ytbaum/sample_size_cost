@@ -40,7 +40,7 @@ for (sample.size in sample.sizes) {
     
     filename <- paste("plots/", "sample_size_", sample.size, ".jpg", sep="")
     jpeg(filename)
-    hist(similarities, breaks <- seq(0, 1, 0.01), freq=FALSE, main=paste("Histogram of Similarity Scores, Sample Size = ", sample.size, sep="" ), xlab="Similarity", ylab="Probability Density of Scores")
+    hist(similarities, breaks <- seq(0, 1, 0.01), freq=FALSE, main=paste("Histogram of Similarity Scores, Sample Size = ", sample.size, sep="" ), xlab="Similarity", ylab="Probability Density of Scores", ylim=c(0,100))
     dev.off()
 }
 
