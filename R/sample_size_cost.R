@@ -16,8 +16,8 @@ zeroes <- rep(0, num.categories)
 sample.sizes <- 10 * (1:100)
 num.samples <- 1000
 
-similarities <- vector()
 for (sample.size in sample.sizes) {
+    similarities <- vector()
 
     print(paste("Now testing at sample size ", sample.size, ". Taking ", num.samples, " samples...", sep=""))
 
