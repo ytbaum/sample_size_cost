@@ -56,7 +56,8 @@ for (sample.size in sample.sizes) {
 filename <- "plots/errorbars.jpg"
 jpeg(filename)
 # TODO: figure out why the se values are all 0, fix that if I can, and then use se values instead
-error.bars(stats=descr.stats.df, ylab = "Similarities Between Sample and Theoretical Distribution", xlab="Sample Size", sd=TRUE, ylim=c(0, 1))
+error.bars(stats=descr.stats.df, ylab = "Similarities Between Sample and Theoretical Distribution", xlab="Sample Size", sd=TRUE, ylim=c(0, 1), xaxt = 'n')
+axis(1, at = 1:length(sample.sizes), labels = err.bars.labels(sample.sizes))
 dev.off()
 
 print("Done.")

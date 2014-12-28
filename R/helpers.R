@@ -32,4 +32,7 @@ jaccard <- function(x1, x2)
     intersection / union
 }
 
-
+err.bars.labels <- function(sample.sizes)
+{
+    as.character(sample.sizes)
+}
