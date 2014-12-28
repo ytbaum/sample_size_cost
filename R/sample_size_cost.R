@@ -1,13 +1,13 @@
 source("R/helpers.R")
 
 # the theoretical distribution we're sampling from
-theoretical <- c(5, 10, 15, 30, 50)
+num.categories <- 20
+theoretical <- rep(1, num.categories)
 
 # normalized version of the "theoretical" vector, for use as probabilities
 theoretical.probs <- theoretical / sum(theoretical)
 
 # names of the categories represented by the theoretical distribution
-num.categories <- length(theoretical)
 categories <- 1:num.categories
 
 # a place-holder vector of all 0's, used in constructing the vector of observed frequencies in the sample
