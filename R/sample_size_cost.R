@@ -1,3 +1,5 @@
+library("psych")
+
 source("R/helpers.R")
 
 # the theoretical distribution we're sampling from
@@ -13,8 +15,11 @@ categories <- 1:num.categories
 # a place-holder vector of all 0's, used in constructing the vector of observed frequencies in the sample
 zeroes <- rep(0, num.categories)
 
-sample.sizes <- 10 * (1:100)
+sample.sizes <- 10 * (1:10)
 num.samples <- 1000
+
+# data frame for recording descriptive statistics about each set of samples
+descr.stats.df <- data.frame()
 
 for (sample.size in sample.sizes) {
     similarities <- vector()
@@ -42,6 +47,16 @@ for (sample.size in sample.sizes) {
     jpeg(filename)
     hist(similarities, breaks <- seq(0, 1, 0.01), freq=FALSE, main=paste("Histogram of Similarity Scores, Sample Size = ", sample.size, sep="" ), xlab="Similarity", ylab="Probability Density of Scores", ylim=c(0,100))
     dev.off()
+
+    # record the descriptive statistics on the sample similarities for this sample size
+    descr.stats <- describe(similarities)
+    descr.stats.df <- rbind(descr.stats.df, descr.stats)
 }
+
+filename <- "plots/errorbars.jpg"
+jpeg(filename)
+# TODO: figure out why the se values are all 0, fix that if I can, and then use se values instead
+error.bars(stats=descr.stats.df, ylab = "Similarities Between Sample and Theoretical Distribution", xlab="Sample Size", sd=TRUE, ylim=c(0, 1))
+dev.off()
 
 print("Done.")
