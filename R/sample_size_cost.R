@@ -2,30 +2,36 @@ library("psych")
 
 source("R/helpers.R")
 
-nc <- 2:20
+bucket.counts <- c(20, 40, 60, 80, 100)
 
-for (num.categories in nc) {
+# sample size at which to take a cross section (across bucket counts) of similarity means and standard deviations
+cross.section.sample.size <- 15 
 
-    print(paste("Now running trial for ", num.categories, " buckets.", sep=""))
+# a data frame for storing descriptive statistics for cross section values
+cross.section.df <- data.frame()
 
-    plots.dir <- paste("plots/", num.categories, "/", sep="")
+for (bucket.count in bucket.counts) {
+
+    print(paste("Now running trial for ", bucket.count, " buckets.", sep=""))
+
+    plots.dir <- paste("plots/", bucket.count, "/", sep="")
     if (!file.exists(plots.dir)) {
         dir.create(plots.dir)
     }
 
     # the theoretical distribution we're sampling from
-    theoretical <- rep(1, num.categories)
+    theoretical <- rep(1, bucket.count)
     
     # normalized version of the "theoretical" vector, for use as probabilities
     theoretical.probs <- theoretical / sum(theoretical)
     
     # names of the categories represented by the theoretical distribution
-    categories <- 1:num.categories
+    categories <- 1:bucket.count
     
     # a place-holder vector of all 0's, used in constructing the vector of observed frequencies in the sample
-    zeroes <- rep(0, num.categories)
+    zeroes <- rep(0, bucket.count)
     
-    sample.sizes <- seq(200, 1000, by = 200)
+    sample.sizes <- seq(5, 25, by = 5)
     num.samples <- 1000
     
     # data frame for recording descriptive statistics about each set of samples
@@ -61,14 +67,34 @@ for (num.categories in nc) {
         # record the descriptive statistics on the sample similarities for this sample size
         descr.stats <- describe(similarities)
         descr.stats.df <- rbind(descr.stats.df, descr.stats)
+
+        if (sample.size == cross.section.sample.size) {
+            cross.section.df <- rbind(cross.section.df, descr.stats)
+        }
     }
     
+    print(paste("Plotting means and standard deviations for bucket count ", bucket.count, "...", sep=""))
+
+    # make errorbars chart of means and standard deviations for this bucket count
     filename <- paste(plots.dir, "errorbars.jpg", sep="")
     jpeg(filename)
     # TODO: figure out why the se values are all 0, fix that if I can, and then use se values instead
     error.bars(stats=descr.stats.df, ylab = "Similarities Between Sample and Theoretical Distribution", xlab="Sample Size", sd=TRUE, ylim=c(0, 1), xaxt = 'n')
     axis(1, at = 1:length(sample.sizes), labels = err.bars.labels(sample.sizes))
     dev.off()
+
     
-    print("Done.")
+    print(paste("Done with bucket count ", bucket.count, ".", sep=""))
 }
+
+print("Making cross-section plot...")
+
+# make "cross-section" plot
+filename <- "plots/cross_section.jpg"
+jpeg(filename)
+main.title <- paste("Cross-section Plot At Sample Size = ", cross.section.sample.size, sep="")
+error.bars(stats=cross.section.df, ylab = "Similarities Between Sample and Theoretical Distribution", xlab="Bucket Count", sd=TRUE, ylim=c(0, 1), xaxt = 'n', main = main.title)
+axis(1, at = 1:length(sample.sizes), labels = err.bars.labels(nc))
+dev.off()
+
+print("Done.")
